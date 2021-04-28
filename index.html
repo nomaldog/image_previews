@@ -15,7 +15,7 @@
 <div class="container" id="upload">
     <div class="row m-3">
         <label>配置数：</label>
-        <input v-model.number="placements" type="number">
+        <input v-model.number="placements" type="number" min="0" max="100">
     </div>
     <div class="row m-3">
         <label>サイズ：</label>
@@ -24,10 +24,10 @@
         <input v-model.number="img_height" type="number">
     </div>
     <div class="row">
-        <div v-for="(preview,index) in previews" class="col">
+        <div v-for="index in [...Array(placements)].map((_, i) => i )" class="col">
         <div class="form-group d-md-inline-block" v-bind:class="{'styleA':styleA[index], 'styleB':styleB[index], 'styleC':styleC[index]}" @dragover.prevent="changeStyle($event,'on',index)" @dragleave.prevent="changeStyle($event,'off',index)" @drop.prevent="uploadFile($event,index)" :style="image_box_style">
             <h3 style="position: absolute;">{{ index + 1 }}</h3>
-            <img v-show="preview" v-bind:src="preview" :style="image_style">
+            <img v-show="previews[index]" v-bind:src="previews[index]" :style="image_style">
         </div>
         <input id="upload_image" type="file" name="img" style="display:none;" accept="image/*">
     </div>
@@ -39,10 +39,10 @@ new Vue({
     el:'#upload',
     data: {
         placements:2,
-        previews:[null,null],
-        styleA:[true,true],
-        styleB:[false,false],
-        styleC:[false,false],
+        previews:Array(100).fill(null),
+        styleA:Array(100).fill(true),
+        styleB:Array(100).fill(false),
+        styleC:Array(100).fill(false),
         count:2,
         img_width:400,
         img_height:400,
@@ -53,16 +53,6 @@ new Vue({
         },
         image_style: function(){
             return ("width:" + this.img_width + "px;") + ("height:" + this.img_height + "px;");
-        }
-    },
-    watch:{
-        placements: function(){
-            if(this.placements > 0){
-                this.previews = new Array(this.placements).fill(null);
-                this.styleA = new Array(this.placements).fill(true);
-                this.styleB = new Array(this.placements).fill(false);
-                this.styleC = new Array(this.placements).fill(false);
-            }
         }
     },
     methods: {
