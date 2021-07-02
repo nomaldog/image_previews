@@ -16,6 +16,11 @@
     <div class="row m-3">
         <label>配置数：</label>
         <input v-model.number="placements" type="number" min="0" max="100">
+
+        <label class="btn btn-primary mx-2">
+          <input type="checkbox" v-model="desc_checked">description
+        </label>
+
     </div>
     <div class="row m-3">
         <label>サイズ：</label>
@@ -30,6 +35,9 @@
             <img v-show="previews[index]" v-bind:src="previews[index]" :style="image_style">
         </div>
         <input id="upload_image" type="file" name="img" style="display:none;" accept="image/*">
+        <div v-if="desc_checked" lass="mb-3">
+          <textarea name="kansou" rows="4" cols="40" style="resize:auto;font-size:125%;"></textarea><br>
+        </div>
     </div>
     </div>
 </div>
@@ -46,6 +54,7 @@ new Vue({
         count:2,
         img_width:400,
         img_height:400,
+        desc_checked:false,
     },
     computed: {
         image_box_style: function(){
